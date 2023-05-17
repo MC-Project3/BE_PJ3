@@ -12,9 +12,9 @@ exports.handler = async (event, context) => {
       const result = await dynamoDB.scan(params).promise();
       return result.Items.map(item => ({
         id: item.id,
-        playerNAME: item.playerNAME,
-        body_shot_url: item.body_shot_url,
-        profile_photo_url: item.profile_photo_url
+        name: item.playerNAME,
+        bodyShotUrl: item.body_shot_url,
+        imageUrl: item.profile_photo_url
       }));
     };
 
@@ -30,10 +30,10 @@ exports.handler = async (event, context) => {
 
       const result = await dynamoDB.scan(params).promise();
       return result.Items.map(item => ({
-        id: item.id,
-        playerNAME: item.playerNAME,
-        body_shot_url: item.body_shot_url,
-        profile_photo_url: item.profile_photo_url
+         id: item.id,
+        name: item.playerNAME,
+        bodyShotUrl: item.body_shot_url,
+        imageUrl: item.profile_photo_url
       }));
     };
 
@@ -52,6 +52,11 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Headers" : "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS,GET"
+      },
       body: JSON.stringify(items)
     };
   } catch (error) {
