@@ -20,11 +20,12 @@ exports.handler = async (event, context) => {
 
     // 사용자가 입력한 값으로 필터링하여 결과 반환
     const getFilteredItems = async (name) => {
-      const params = {
-        TableName: 'nba-info',
+      const uppercaseName = name.toUpperCase();
+  const params = {
+     TableName: 'nba-info',
         FilterExpression: 'contains(playerNAME, :name)',
         ExpressionAttributeValues: {
-          ':name': name
+      ':name': uppercaseName
         }
       };
 

@@ -2,6 +2,7 @@ const AWS = require('aws-sdk');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async (event, context) => {
+  
   try {
     // 기본적으로 모든 team의 값을 조회
     const getAllItems = async () => {
@@ -20,12 +21,13 @@ exports.handler = async (event, context) => {
 
     // 사용자가 입력한 값으로 필터링하여 결과 반환
     const getFilteredItems = async (team) => {
+      const uppercaseTeam = team.toUpperCase(); //입력값 대문자로 변환 
       const params = {
         TableName: 'nba-teaminfo',
         FilterExpression: 'contains(teamNAME, :team)',
         ExpressionAttributeValues: {
-          ':team': team
-        }
+          ':team': uppercaseTeam
+        } //(쿼리식 안에는 UPPER함수 사용하면 ERROR남)"invalid filterexpression: invalid function name; function: upper"
       };
 
       const result = await dynamoDB.scan(params).promise();
