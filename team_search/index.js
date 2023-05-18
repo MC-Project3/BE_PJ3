@@ -37,7 +37,7 @@ exports.handler = async (event, context) => {
     };
 
     // 사용자가 입력한 team 값
-    const name = event.queryStringParameters && event.queryStringParameters.name;
+    const team = event.queryStringParameters && event.queryStringParameters.team;
 
     let items;
 
