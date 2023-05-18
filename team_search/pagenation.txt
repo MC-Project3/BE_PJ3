@@ -1,24 +1,49 @@
 const AWS = require('aws-sdk');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
+const pageSize = 5; // 페이지당 항목 수
+
 exports.handler = async (event, context) => {
   
   try {
     // 기본적으로 모든 team의 값을 조회
-    const getAllItems = async () => {
-      const params = {
-        TableName: 'nba-teaminfo'
+    const getAllItemsWithPagination = async (pageSize, lastEvaluatedKey) => {
+        const params = {
+          TableName: 'nba-teaminfo',
+          Limit: pageSize,
+          ExclusiveStartKey: lastEvaluatedKey
+        };
+      
+        const result = await dynamoDB.scan(params).promise();
+      
+        const items = result.Items.map(item => ({
+          id: item.id,
+          team: item.teamNAME,
+          teamImageUrl: item.team_image_url
+        }));
+      
+        const nextKey = result.LastEvaluatedKey;
+      
+        return {
+          items,
+          nextKey
+        };
       };
+      const pageSize = 10; // 페이지당 항목 수
+let lastEvaluatedKey = null; // 이전 페이지의 마지막 평가 키
 
-      const result = await dynamoDB.scan(params).promise();
-      return result.Items.map(item => ({
-        id: item.id,
-        team: item.teamNAME,
-        teamImageUrl: item.team_image_url
+// 첫 페이지 조회
+const firstPage = await getAllItemsWithPagination(pageSize, lastEvaluatedKey);
+const firstPageItems = firstPage.items;
+const nextKey = firstPage.nextKey;
 
-      }));
-    };
-
+// 다음 페이지 조회
+if (nextKey) {
+  lastEvaluatedKey = nextKey;
+  const nextPage = await getAllItemsWithPagination(pageSize, lastEvaluatedKey);
+  const nextPageItems = nextPage.items;
+  // 이어서 처리
+}
     // 사용자가 입력한 값으로 필터링하여 결과 반환
     const getFilteredItems = async (team) => {
       const uppercaseTeam = team.toUpperCase(); //입력값 대문자로 변환 
@@ -43,9 +68,9 @@ exports.handler = async (event, context) => {
 
     let items;
 
-    // name 값이 없으면 모든 항목을 조회하여 반환
+    // team 값이 없으면 모든 항목을 조회하여 반환
     if (!team) {
-      items = await getAllItems();
+      items = await getAllItemsWithPagination();
     } else {
       // team 값이 존재하면 필터링하여 반환
       items = await getFilteredItems(team);
