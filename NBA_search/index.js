@@ -90,42 +90,42 @@ const handleTeamsResource = async (event) => {
     const result = await dynamoDB.scan(params).promise();
     return result.Items.map(item => ({
       id: item.id,
-      team: item.teamNAME,
-      teamImageUrl: item.team_image_url
+      name: item.teamNAME,
+      imageUrl: item.team_image_url
 
     }));
   };
 
   // 사용자가 입력한 값으로 필터링하여 결과 반환
-  const getFilteredItems = async (team) => {
-    const uppercaseTeam = team.toUpperCase(); //입력값 대문자로 변환 
+  const getFilteredItems = async (name) => {
+    const uppercaseTeam = name.toUpperCase(); //입력값 대문자로 변환 
     const params = {
       TableName: 'nba-teaminfo',
-      FilterExpression: 'contains(teamNAME, :team)',
+      FilterExpression: 'contains(teamNAME, :name)',
       ExpressionAttributeValues: {
-        ':team': uppercaseTeam
+        ':name': uppercaseTeam
       } //(쿼리식 안에는 UPPER함수 사용하면 ERROR남)"invalid filterexpression: invalid function name; function: upper"
     };
 
     const result = await dynamoDB.scan(params).promise();
     return result.Items.map(item => ({
        id: item.id,
-       team: item.teamNAME,
-       teamImageUrl: item.team_image_url
+       name: item.teamNAME,
+       imageUrl: item.team_image_url
     }));
   };
 
   // 사용자가 입력한 team 값
-  const team = event.queryStringParameters && event.queryStringParameters.team;
+  const name = event.queryStringParameters && event.queryStringParameters.name;
 
   let items;
 
   // name 값이 없으면 모든 항목을 조회하여 반환
-  if (!team) {
+  if (!name) {
     items = await getAllItems();
   } else {
     // team 값이 존재하면 필터링하여 반환
-    items = await getFilteredItems(team);
+    items = await getFilteredItems(name);
   }
 
   return {
