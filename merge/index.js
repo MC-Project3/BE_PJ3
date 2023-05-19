@@ -66,5 +66,4 @@ const getTeamById = async (teamId) => {
         console.error(e);
         throw e;
     }
-
 }
