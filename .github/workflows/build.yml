@@ -26,4 +26,11 @@ jobs:
       - name: Create zip package
         run: zip -j deploy.zip ./NBA_search/*
       - name: Deploy to Lambda
-        run: aws lambda update-function-code --function-name NBA-function --zip-file fileb://deploy.zip
+        run: aws lambda update-function-code --function-name NBA-function --zip-file fileb://deploy.zip      
+      - name: Change directory and run command
+        working-directory: ./merge
+        run: npm ci
+      - name: Create zip package
+        run: zip -j deploy.zip ./merge/*
+      - name: Deploy to Lambda
+        run: aws lambda update-function-code --function-name merge-function --zip-file fileb://deploy.zip
