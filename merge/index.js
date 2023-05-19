@@ -62,6 +62,7 @@ const getTeamById = async (teamId) => {
 
         const { Item } = await ddbClient.send(new GetItemCommand(params));
         return (Item) ? unmarshall(Item) : {};
+      
     }catch(e){
         console.error(e);
         throw e;
