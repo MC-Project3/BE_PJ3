@@ -22,14 +22,8 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ca-central-1
-      - name: Install dependencies
-        env:
-          CI: true
-        run: npm ci
-      - name: Build
-        run: npm run build
+          aws-region: ca-central-1            
       - name: Create zip package
-        run: zip j deploy.zip ./dist/*
+        run: zip -j deploy.zip ./NBA_search/*
       - name: Deploy to Lambda
         run: aws lambda update-function-code --function-name NBA-function --zip-file fileb://deploy.zip
