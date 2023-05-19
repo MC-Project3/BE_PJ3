@@ -31,6 +31,6 @@ jobs:
         working-directory: ./merge
         run: npm ci
       - name: Create zip package
-        run: zip -j deploy.zip ./merge/*
+        run: zip -r deploy.zip ./merge/*
       - name: Deploy to Lambda
         run: aws lambda update-function-code --function-name merge-function --zip-file fileb://deploy.zip
