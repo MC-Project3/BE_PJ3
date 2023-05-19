@@ -34,5 +34,7 @@ jobs:
         run: ls ./merge
       - name: Create zip package
         run: zip -r deploy.zip ./merge/*
+      - name: Check zip file
+        run: zcat -f delpoy.zip
       - name: Deploy to Lambda
         run: aws lambda update-function-code --function-name merge-function --zip-file fileb://deploy.zip
