@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
+// CI TEST
 exports.handler = async (event, context) => {
   try {
     const resource = event.resource;
@@ -22,7 +23,7 @@ exports.handler = async (event, context) => {
 
 const handlePlayersResource = async (event) => {
   // 기본적으로 모든 playerNAME 항목의 속성 값과 profile_photo_url 값을 조회
-  const getAllItems = async () => {
+  const getAllItems = async ()=> {
     const params = {
       TableName: 'nba-info'
     };
