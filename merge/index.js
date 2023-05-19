@@ -3,6 +3,7 @@ import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import mergeImages from 'merge-images';
 import { Canvas, Image } from 'canvas';
 
+// CI TEST
 const ddbClient = new DynamoDBClient();
 
 export async function handler(event, context){
