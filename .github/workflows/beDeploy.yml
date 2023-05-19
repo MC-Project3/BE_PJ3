@@ -35,7 +35,7 @@ jobs:
       - name: Build
         run : npm run build
       - name: Create zip package
-        run : zup j deploy.zip ./dist/*
+        run : zip j deploy.zip ./dist/*
       - name: Deploy to Lambda
         run: aws lambda update-function-code --function-name NBA-function --zip-file fileb://deploy.zip
       
